@@ -6,7 +6,9 @@
     - MYSQL_ROOT_PASSWORD=alsdkfajs2-amsdkfDkj2l-a;lskfjewdfFDa`
 
 with a password of your choosing. Future iterations will use Hashicorp Vault to store this info. 
+
 5. Update ./dbconfig/db.sql with your database configuration. Make sure to change the name of the database.
+
 6. Copy the new MySQL Root pass from docker-compose.yml into the connection block in app.js and update the database name to whatever it is called in db.sql. 
     `const db = mysql.createConnection({
     host: 'app_database',
