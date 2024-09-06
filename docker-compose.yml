@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: node:latest
+    container_name: app-server
+    working_dir: /home/app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - .:/home/app
+      - node_modules:/home/app/node_modules
+    expose:
+      - "8081"
+    ports:
+      - "80:8080"
+    command: npm run dev
+    networks:
+      - app-network
+    depends_on:
+      - db
+  db:
+    image: mysql:latest
+    container_name: app_database
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=alsdkfajs2-amsdkfDkj2l-a;lskfjewdfFDa
+    volumes:
+      - ./dbdata:/data/db
+      - ./dbconfig:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  dbconfig:
+  dbdata:
+  node_modules:
+
+

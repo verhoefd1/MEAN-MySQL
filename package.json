@@ -1,0 +1,36 @@
+{
+  "name": "service-app",
+  "version": "1.0.0",
+  "description": "A starting point for SQL driven webapps",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/verhoefd1/solid-umbrella"
+  },
+  "keywords": [
+    "SQL"
+  ],
+  "author": "Dylan Verhoef",
+  "license": "GNU GPLv3",
+  "bugs": {
+    "url": "https://github.com/verhoefd1/solid-umbrella/issues"
+  },
+  "homepage": "https://github.com/verhoefd1/solid-umbrella/#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "bcrypt": "^5.1.1",
+    "bootstrap": "^5.3.3",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session":"^1.18.0",
+    "express-mysql-session":"^3.0.3",
+    "mysql2": "^3.11.0",
+    "method-override": "^3.0.0",
+    "nodemon": "^3.1.0"
+  }
+}
