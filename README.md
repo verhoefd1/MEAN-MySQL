@@ -19,5 +19,10 @@ Note: This app is in dev mode using nodemon to auto restart the node server ever
 to 
     CMD ["npm", "run", "start"]
 
+Also, make sure to update the similar line in ./docker-compose.yml: 
+    command: npm run dev 
+to 
+    command: npm run start
+
 
     
