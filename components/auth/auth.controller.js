@@ -3,22 +3,20 @@ const AuthService = require('./auth.service');
 class AuthController {
     static async renderRegistration(req, res) {
         try {
-            res.render('auth/signup', { page: "register" });
+            res.render('auth/signup');
         } catch (error) {
             console.error('Error rendering registration page:', error);
             res.status(500).send('Server error');
         }
     }
-
     static async renderLogin(req, res) {
         try {
-            res.render('auth/login', { page: "login" });
+            res.render('auth/login');
         } catch (error) {
             console.error('Error rendering login page:', error);
             res.status(500).send('Server error');
         }
     }
-
     static async createUser(req, res) {
         console.log("made it to create user controller function")
         try {

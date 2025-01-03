@@ -10,10 +10,7 @@ class GeneralController {
         }
     }
     static renderAboutPage(req, res) {
-        res.render('about', { page: 'about' });
-    }
-    static renderGettingStartedPage(req, res) {
-        res.render('getting-started', { page: 'getting-started' });
+        res.render('general/about');
     }
 }
 

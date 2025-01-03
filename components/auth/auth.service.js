@@ -13,7 +13,6 @@ class AuthService {
             });
         });
     }
-
     static async createUser(userDetails) {
         const sql = 'INSERT INTO users (user_id, user_email, user_pass, user_type) VALUES (?, ?, ?, ?)';
         const values = [userDetails.userId, userDetails.email, userDetails.password, userDetails.userType]
