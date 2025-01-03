@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: node:latest
-    container_name: app-server
+    container_name: chem_spill_app_server
     working_dir: /home/app
     restart: unless-stopped
     environment:
@@ -25,7 +25,7 @@ services:
       - db
   db:
     image: mysql:latest
-    container_name: app_database
+    container_name: chem_spill_app_database
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=alsdkfajs2-amsdkfDkj2l-a;lskfjewdfFDa

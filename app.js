@@ -2,47 +2,123 @@
 const
     express = require("express"),
     session = require("express-session"),
+    MySQLStore = require("express-mysql-session")(session),
     app = express(),
     bodyParser = require("body-parser"),
-    serverName = "MEAN-SQL Server",
+    methodOverride = require("method-override"),
+    flash = require("connect-flash"),
+    serverName = "Chemical Spill",
     port = process.env.PORT || 8080,
     mysql = require("mysql2"),
-    bcrypt = require("bcrypt");
-
-
+    { db } = require("./utils"),
+    { sessionStore } = require("./utils"),
+    //userRoutes = require('./components/user/user.routes'),
+    // companyRoutes = require('./components/company/company.routes'),
+    // requestRoutes = require('./components/request/request.routes'),
+    //authRoutes = require('./components/auth/auth.routes'),
+    // bcrypt = require("bcrypt"),
+    generalRoutes = require('./components/general/general.routes')//,
+    //{ attachUserToRequest } = require('./components/user/user.middleware');
+;
 
 //serves all files in public directory to /
 app.use(express.static(__dirname + "/public"));
+
 // app.use('/bootstrap', express.static(__dirname, 'node_modules/bootstrap'));
-//creates middleware link with bodyparser
+//creates middleware link with bodyparser to be able to parse HTTPS calls
 app.use(bodyParser.urlencoded({ extended: true }));
-//adds middleware to all routes without explicitly adding it ie ejs
+
+//create middleware link for handling PUT method requests: 
+app.use(methodOverride('_method'));
+
+//adds middleware to all routes without explicitly adding it ie ejs allowing to call just the name of the file in views
 app.set("views", __dirname + "/views/");
 app.set("view engine", "ejs");
-// set up express sessions
+
+
+// connect to the databases
+// const db = mysql.createConnection({
+//     host: 'app_database',
+//     port: 3306,
+//     user: 'root',
+//     password: '1023md-123123fj-1231j23m',
+//     database: 'service_db'
+// });
+
+// const sessionStore = new MySQLStore({
+//     host: 'app_database',
+//     port: 3306,
+//     user: 'root',
+//     password: '1023md-123123fj-1231j23m',
+//     database: 'session_db'
+// });
+
+// set up express sessions - to be removed for session storage in MySQL or REDIS
 app.use(session({
+    key: 'service_app_cookie',
     secret: 'alsdkfajs2-amsdkfDkj2l-a;lskfjewdfFDa',       // Replace with a secure secret key
     resave: false,                   // Forces the session to be saved back to the session store, even if it wasn't modified during the request
+    store: sessionStore,
     saveUninitialized: false,        // Don't create a session until something is stored
-    cookie: { secure: false }        // Set to `true` if you're using HTTPS; otherwise, keep it `false` for development
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24,  // 1-day expiration
+        sameSite: 'lax',  // Adjust this if needed
+        secure: false  // Set to true if using HTTPS
+    }
 }));
 
-app.get("/", function (req, res) {
-    res.render("index");
-});
-
-const db = mysql.createConnection({
-    host: 'app_database',
-    user: 'root',
-    password: '1023md-123123fj-1231j23m',
-    database: 'service_db'
+//attach user profile to all routes
+//app.use(attachUserToRequest);
+app.use(flash());
+app.use((req, res, next) => {
+    res.locals.successMessage = req.flash('success');
+    res.locals.errorMessage = req.flash('error');
+    next();
 });
 
 
-app.connect((err) => {
-    if (err) throw err;
-    console.log('Connected to MySQL database.');
-});
+
+//Functions:
+// Function to generate and return a unique user ID
+//COMBINE THE GENERATE UUIDs into a single function? 
+// const generateUserId = (callback) => {
+//     db.query('SELECT UUID() AS user_id', (err, results) => {
+//         if (err) throw err;             // Throw an error if the query fails
+//         console.log(results[0].user_id);
+//         callback(results[0].user_id);        // Call the callback function with the generated UUID
+//     });
+// };
+
+
+
+
+// app.get("/signupcompany", function (req, res) {
+//     res.render("signup", { pass_err: '', page: "signup", userType: "company" });
+// });
+
+//load in routes
+app.use('/', generalRoutes);
+//app.use('/user', userRoutes);
+// app.use('/company', companyRoutes);
+// app.use('/requests', requestRoutes);
+//app.use('/auth', authRoutes);
+
+
+// capture sign up form info 
+
+// app.get("/", function(req, res){
+//     var q = 'SELECT COUNT(*) as count FROM users';
+//     connection.query(q, function (error, results) {
+//     if (error) throw error;
+//     var msg = "We have " + results[0].count + " users";
+//     res.send(msg);    
+// })});
+
+// app.connect((err) => {
+//     if (err) throw err;
+//     console.log('Connected to MySQL database.');
+// });
+
 app.listen(port, function () {
     // using the ${port} syntax means that it takes it as a template literaly and will pull in the port number dynamically
     console.log(serverName + " is now listening on port: " + port);
