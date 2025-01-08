@@ -13,10 +13,13 @@ router.get('/register', AuthController.renderRegistration);
 // Render Login Form
 router.get('/login', AuthController.renderLogin);
 
+// Log Out
+router.get('/logout', AuthController.logoutUser);
+
 //Create user account
 router.post('/register', validatePasswordMiddleware, hashPasswordMiddleware, createUUID, AuthController.createUser);
 
 //Login user account
-router.post('/login', AuthController.loginUser)
+router.post('/login', AuthController.loginUser);
 
 module.exports = router;

@@ -1,4 +1,5 @@
-const { db } = require("../../utils");
+const { db } = require("../../utils"),
+bcrypt = require("bcrypt");
 
 class AuthService {
     static generateUUID() {
@@ -14,8 +15,8 @@ class AuthService {
         });
     }
     static async createUser(userDetails) {
-        const sql = 'INSERT INTO users (user_id, user_email, user_pass, user_type) VALUES (?, ?, ?, ?)';
-        const values = [userDetails.userId, userDetails.email, userDetails.password, userDetails.userType]
+        const sql = 'INSERT INTO Users (id, email, userPassword, firstName, lastName) VALUES (?, ?, ?, ?, ?)';
+        const values = [userDetails.userId, userDetails.email, userDetails.password, userDetails.firstName, userDetails.lastName]
 
         return new Promise((resolve, reject) => {
             db.query(sql, values, (err, results) => {
@@ -23,6 +24,34 @@ class AuthService {
                     reject(err);
                 } else {
                     resolve(results);
+                }
+            });
+        });
+    }
+
+    static async loginUser(email, password) {
+        const sql = 'SELECT * FROM Users WHERE email = ?';
+        const values = [email];
+
+        return new Promise((resolve, reject) => {
+            db.query(sql, values, async (err, results) => {
+                if(err) return reject(err); 
+
+                if(results.length > 0) {
+                    const user = results[0];
+                  
+                    //Compare provided password with hashed password
+                    const isMatch = await bcrypt.compare(password, user.userPassword);
+                    if(isMatch) {
+                        console.log("Password matched for user:", user.id);
+                        resolve(user);
+                    } else {
+                        console.log("Invalid email or password", email);
+                        results(null);
+                    }
+                } else {
+                    console.log("No user found with email:", email);
+                    resolve(null); // User not found
                 }
             });
         });

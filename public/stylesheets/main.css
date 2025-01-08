@@ -1,3 +1,30 @@
 body {
     background: black;
 }
+
+.signup {
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.authItems {
+    background-color: gray;
+}
+
+.float-btn {
+    background-color: none;
+    color: #ffa260;
+    border: 2px solid;
+    border-radius: 8px;
+    padding: 1em 2em;
+    font-size: 1em;
+    transition: color 0.2s, border-color .25s, box-shadow .3s, transform .2s;
+}
+
+.float-btn:hover {
+    border-color: #f1ff5c;
+    color: white;
+    box-shadow: 0 0.5em 0.5em -0.4em #f1ff5c;
+    transform: translateY(-.25em);
+    cursor: pointer;
+}

@@ -49,6 +49,7 @@ app.use(session({
 //attach user profile to all routes
 //app.use(attachUserToRequest);
 app.use(flash());
+
 //attach flash to all routes
 app.use((req, res, next) => {
     res.locals.successMessage = req.flash('success');

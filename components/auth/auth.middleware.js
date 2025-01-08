@@ -3,6 +3,7 @@ const
     bcrypt = require('bcrypt');
 ;
 
+
 async function createUUID(req, res, next) {
     try {
         const UUID = await AuthService.generateUUID(); //call the service to generate the UUID
@@ -18,16 +19,18 @@ async function createUUID(req, res, next) {
 //Middleware to validate password
 function validatePasswordMiddleware(req, res, next) {
     //take the password
+    console.log("validating password");
     const { password } = req.body;
+    console.log("captured password: ", password);
     //test to make sure it matches the password policy
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     //if it does, pass it to the password encryption 
     if (!regex.test(password)) {
-        req.flash('error', 'Password must be at least 8 characters∫long, include an uppercase letter, a number, and a special character.');
-        return res.redirect('/register'); // return to registration page to reenter password
+        console.log("password failed validation");
+        req.flash('error', 'Password must be at least 8 characters long, include an uppercase letter, a number, and a special character.');
+        return res.redirect('/auth/register'); // return to registration page to reenter password
     }
     next();
-    //if it doesn't, redirect somewhere else.
 };
 
 async function hashPasswordMiddleware(req, res, next) {
